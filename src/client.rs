@@ -59,12 +59,16 @@ impl Client {
         endpoint: &str,
         payload: Option<P>,
     ) -> Result<T> {
+        let request = build_signed_request_p(payload, 5000)?;
+
+        /*
         let req = if let Some(p) = payload {
             build_request_p(p)?
         } else {
             String::new()
         };
-        let string = self.get_signed(endpoint, &req).await?;
+        */
+        let string = self.get_signed(endpoint, &request).await?;
         let data: &str = string.as_str();
         let t = from_str(data)?;
         Ok(t)

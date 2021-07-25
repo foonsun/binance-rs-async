@@ -9,6 +9,7 @@ use crate::margin::Margin;
 use crate::market::*;
 use crate::savings::Savings;
 use crate::userstream::*;
+use crate::etp::ETP;
 
 pub trait Binance: Sized {
     fn new(api_key: Option<String>, secret_key: Option<String>) -> Self {
@@ -98,6 +99,15 @@ impl Binance for FuturesAccount {
 }
 
 impl Binance for Margin {
+    fn new_with_config(api_key: Option<String>, secret_key: Option<String>, config: &Config) -> Self {
+        Self {
+            client: Client::new(api_key, secret_key, config.rest_api_endpoint.clone()),
+            recv_window: config.recv_window,
+        }
+    }
+}
+
+impl Binance for ETP {
     fn new_with_config(api_key: Option<String>, secret_key: Option<String>, config: &Config) -> Self {
         Self {
             client: Client::new(api_key, secret_key, config.rest_api_endpoint.clone()),

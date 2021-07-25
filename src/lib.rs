@@ -83,6 +83,7 @@ pub mod config;
 pub mod futures;
 pub mod general;
 pub mod margin;
+pub mod etp;
 pub mod market;
 pub mod rest_model;
 pub mod savings;

@@ -589,6 +589,56 @@ pub struct PairQuery {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
+pub struct TokenNameQuery {
+    pub token_name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Subscribe {
+    pub token_name: String,
+    pub cost: f64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SubscribeResult {
+    pub token_name: String,
+    pub id: u64,
+    pub status: String,
+    pub amount: String,
+    pub cost: String,
+    pub timestamp: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Redeem {
+    pub token_name: String,
+    pub amount: f64,
+} 
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct RedeemResult {
+    pub token_name: String,
+    pub id: u64,
+    pub status: String,
+    pub redeem_amount: String,
+    pub timestamp: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct EtpLimit{
+    pub token_name: String,
+    pub user_daily_total_purchase_limit: String,
+    pub user_daily_total_redeem_limit: String,
+}
+
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct PairAndWindowQuery {
     pub symbol: String,
     pub recv_window: u64,
@@ -802,6 +852,25 @@ pub struct PropertyCmd {
     pub id: i32,
     pub method: String,
     pub params: (String, bool),
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TokenInfo {
+    pub token_name: String,
+    pub description: String,
+    pub underlying: String,
+    pub token_issued: String,
+    pub basket: String,
+    pub nav: String,
+    pub real_leverage: String,
+    pub funding_rate: String,
+    pub daily_management_fee: String,
+    pub purchase_fee_pct: String,
+    pub daily_purchase_limit: String,
+    pub redeem_fee_pct: String,
+    pub daily_redeem_limit: String,
+    pub timestamp: u64,
 }
 
 pub mod string_or_float {
