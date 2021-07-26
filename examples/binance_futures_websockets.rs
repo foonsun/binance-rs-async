@@ -1,8 +1,44 @@
 use binance::futures::websockets::*;
+use binance::api::*;
+use binance::futures::userstream::*;
+use binance::futures::websockets::FuturesWebsocketEvent;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 fn main() {
     market_websocket();
+}
+
+
+#[allow(dead_code)]
+async fn user_stream_websocket() {
+    let keep_running = AtomicBool::new(true); // Used to control the event loop
+    let api_key_user = Some("YOUR_KEY".into());
+    let user_stream: FuturesUserStream = Binance::new(api_key_user, None);
+
+    if let Ok(answer) = user_stream.start().await {
+        let listen_key = answer.listen_key;
+
+        let mut web_socket: FuturesWebSockets<'_> = FuturesWebSockets::new(|event: FuturesWebsocketEvent| {
+            if let FuturesWebsocketEvent::OrderTrade(trade) = event {
+                println!(
+                    "Symbol: {}, Side: {:?}, Price: {}, Execution Type: {:?}",
+                    trade.symbol, trade.side, trade.price, trade.execution_type
+                );
+            };
+
+            Ok(())
+        });
+
+        web_socket.connect(FuturesMarket::USDM, &listen_key).unwrap(); // check error
+        if let Err(e) = web_socket.event_loop(&keep_running) {
+            println!("Error: {}", e);
+        }
+        user_stream.close(&listen_key).await.unwrap();
+        web_socket.disconnect().unwrap();
+        println!("Userstrem closed and disconnected");
+    } else {
+        println!("Not able to start an User Stream (Check your API_KEY)");
+    }
 }
 
 fn market_websocket() {
